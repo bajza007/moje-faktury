@@ -47,6 +47,30 @@ Pojďme tvůj nápad převést na webovou appku."
 
 ## Proces (drž se tohoto pořadí)
 
+### 0. Představení (vždy, bez ohledu na úroveň)
+
+Než se začneš ptát, řekni co tě čeká. Přizpůsob délku úrovni:
+
+**Junior:**
+"Než začneme cokoliv programovat, potřebujeme vědět CO stavíme. Projdeme
+spolu 5 kroků — ptám se, ty odpovídáš, a na konci budeš mít hotové zadání
+pro svou appku:
+1. Jaký problém řešíš
+2. Pro koho to je
+3. Co appka umí (3 hlavní věci)
+4. Co necháme na později
+5. Jak budou vypadat data v databázi — nemusíš tomu rozumět, navrhnu to za tebe
+
+Celé to zabere asi 10 minut. Pojďme na to!"
+
+**Medior:**
+"Projdeme spolu mini PRD — problém, uživatel, scope, datový model.
+Ptám se krok po kroku, na konci z toho vypadne zadání + SQL pro databázi.
+Zabere to 10 minut."
+
+**Senior:**
+"Připravím PRD — problém, scope, datový model, SQL. Řekni mi co stavíš."
+
 ### 1. Problém
 Zeptej se: "Jaký problém chceš řešit? Pro koho? Popiš mi to jednou dvěma větami,
 jako bys to vysvětloval kamarádovi."
@@ -76,6 +100,20 @@ Na základě odpovědí navrhni, co je IN a co je OUT pro MVP:
 Zeptej se: "Souhlasíš s tímhle scope? Chceš něco přidat nebo ubrat?"
 
 ### 5. Datový model
+
+Před návrhem tabulek vysvětli, o co jde — přizpůsob úrovni:
+
+**Junior:**
+"Teď přijde datový model — to znamená, jak budou vypadat data v databázi.
+Představ si to jako tabulku v Excelu: každá tabulka má sloupce (název, typ,
+popis) a řádky (jednotlivé záznamy). Navrhnu to za tebe podle toho, co jsi
+mi řekl — ty jen zkontroluj, jestli tam nic nechybí."
+
+**Medior:**
+"Teď navrhnu tabulky pro Supabase. Koukni, jestli sedí."
+
+**Senior:** (bez vysvětlení, rovnou navrhni)
+
 Na základě všeho výše navrhni tabulky a sloupce pro Supabase (PostgreSQL).
 Pro každou tabulku ukaž: název, sloupce (název, typ, popis).
 
@@ -86,11 +124,7 @@ Drž to jednoduché — typicky 1-3 tabulky. Vždycky zahrň:
 
 Pro cizí klíče používej integer reference (např. `category_id integer references categories(id)`).
 
-Po návrhu tabulek vykresli vizuální přehled struktury.
-
-**Formát závisí na úrovni účastníka:**
-
-**Junior** — zobraz jen ASCII tabulky (přehledné, žádný extra tooling):
+Po návrhu tabulek vykresli přehled jako ASCII tabulky (pro všechny úrovně):
 
 ```
 TODOS
@@ -107,24 +141,8 @@ CATEGORIES
  name        | text
 ```
 
-**Medior / Senior** — zobraz ASCII tabulky + Mermaid ER diagram (renderuje se
-v GitHub issue):
-
-```mermaid
-erDiagram
-    TODOS {
-        int id PK
-        text title
-        boolean done
-        int category_id FK
-        timestamptz created_at
-    }
-    CATEGORIES {
-        int id PK
-        text name
-    }
-    CATEGORIES ||--o{ TODOS : contains
-```
+Mermaid ER diagram v konverzaci nezobrazuj — přidej ho až do GitHub Issue
+(krok 6B), kde se renderuje nativně.
 
 Zeptej se: "Vypadá model dobře? Chybí ti nějaký sloupec nebo tabulka?"
 
@@ -171,7 +189,7 @@ Ulož PRD do souboru `PRD.md` v kořenu projektu (ostatní agenti ho čtou):
 
 ## Diagram vztahů
 
-(Mermaid ER diagram — vynech pro juniory, ti mají jen ASCII tabulky výše)
+(Mermaid ER diagram — sem NEVKLÁDEJ, přidej ho jen do GitHub Issue v kroku 6B)
 
 ## SQL pro Supabase
 
@@ -243,8 +261,8 @@ a já je tam vytvořím."
   složité relace. Pro workshop stačí 1-3 tabulky s basic sloupci.
 - Používej integer ID (generated always as identity), NE uuid.
   Integer ID jsou čitelnější pro začátečníky (id=1, id=2...) a jednodušší na debug.
-- Vždy vykresli vizuální přehled tabulek. Junior dostane ASCII tabulky (méně
-  friction), medior/senior dostane i Mermaid ER diagram (renderuje se na GitHubu).
+- V konverzaci zobrazuj datový model jako ASCII tabulky (pro všechny úrovně).
+  Mermaid ER diagram přidej jen do GitHub Issue (krok 6B) — tam se renderuje nativně.
 - SQL musí být funkční pro Supabase — tzn. PostgreSQL syntax.
   Na každou tabulku přidej `ALTER TABLE <nazev> DISABLE ROW LEVEL SECURITY;`
   (Supabase má RLS zapnuté by default — bez vypnutí by anon key nevrátil data).

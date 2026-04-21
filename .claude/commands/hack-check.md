@@ -52,7 +52,7 @@ Dále ověř, že `gh` umí pushovat — spusť `ssh -T git@github.com 2>&1` (ne
 to pro krok 10 (push nebude fungovat).
 
 ### 6. Supabase přístup
-Zeptej se uživatele: "Přihlásíš se na https://supabase.com/dashboard — vidíš svůj dashboard?"
+Zeptej se uživatele: "Přihlásíš se na https://supabase.com/dashboard — vidíš svůj dashboard a je tlacitko New project zelene?"
 - ✓ pokud ano
 - ✗ pokud ne. Řekni: "Zaregistruj se na https://supabase.com (free tier, stačí GitHub login)"
 

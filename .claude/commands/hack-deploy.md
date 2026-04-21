@@ -68,7 +68,7 @@ remote desktopu).
 2. Vyber repo
 3. V "Environment Variables" přidej:
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 4. Klikni Deploy
 
 **Možnost B — přes CLI** (jen pokud účastník výslovně chce):
@@ -80,7 +80,7 @@ použij Možnost A.
 ```bash
 npx vercel --yes
 npx vercel env add NEXT_PUBLIC_SUPABASE_URL
-npx vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+npx vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 npx vercel --prod
 ```
 

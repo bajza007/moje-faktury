@@ -33,35 +33,37 @@ Přečti soubor `PRD.md` v kořenu projektu. Pokud neexistuje, řekni uživateli
 
 ### 2. Ověř prerekvizity
 Zeptej se uživatele: "Máš vytvořený Supabase projekt a spuštěné SQL z PRD v SQL editoru?
-Potřebuju od tebe dvě hodnoty:
+Potřebuju od tebe dvě hodnoty — najdeš je v Supabase dashboardu: otevři svůj
+projekt a klikni na tlačítko **Connect** (nahoře). Tam uvidíš obě:
 - NEXT_PUBLIC_SUPABASE_URL (formát: https://xxx.supabase.co)
-- NEXT_PUBLIC_SUPABASE_ANON_KEY (začíná na eyJ...)"
+- NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (začíná na eyJ...)"
 
 ### 3. Vygeneruj aplikaci
 Na základě PRD:
 
-1. **Přesuň workshop soubory z cesty** — `create-next-app` vyžaduje prázdný
-   adresář, ale v repu už jsou CLAUDE.md, README.md, .claude/, .gitignore atd.
-   Přesuň je dočasně do parentu:
+1. **Vytvoř Next.js projekt v podadresáři** — `create-next-app` vyžaduje
+   prázdný adresář, ale v repu už jsou CLAUDE.md, PRD.md, .claude/ atd.
+   Proto appku inicializuj do dočasného podadresáře a pak ji přesuň:
 
    ```bash
-   mkdir -p ../_workshop-tmp
-   mv CLAUDE.md README.md .claude .gitignore PRD.md .participant-level ../_workshop-tmp/ 2>/dev/null
-   # Skryté soubory co mohou zůstat: .git, .github-pending — ty nevadí
+   npx create-next-app@15.5.3 _nextapp --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --use-npm
    ```
 
-2. Inicializuj Next.js projekt:
-   ```
-   npx create-next-app@15.3.2 . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --use-npm
-   ```
-
-3. **Vrať workshop soubory zpátky** — přepiš README.md vygenerovaný create-next-app
-   naším workshopovým:
+2. **Přesuň obsah appky do kořene projektu:**
 
    ```bash
-   mv ../_workshop-tmp/* ../_workshop-tmp/.claude ../_workshop-tmp/.gitignore . 2>/dev/null
-   rmdir ../_workshop-tmp
+   # Přesuň všechny soubory (včetně skrytých) z podadresáře do kořene
+   shopt -s dotglob
+   mv _nextapp/* .
+   shopt -u dotglob
+   rmdir _nextapp
    ```
+
+   Tohle přepíše README.md vygenerovaný create-next-app, ale to je OK —
+   náš workshopový README.md zůstane (create-next-app ho vytvořil v podadresáři,
+   ne v kořeni). Pokud create-next-app vygeneroval vlastní `.gitignore`,
+   **slučuj ho** s naším workshopovým (přidej řádky, které v našem chybí,
+   hlavně `.next/` a `node_modules/`).
 
    Ověř, že `.env.local` je v `.gitignore` (create-next-app ho tam typicky dá,
    ale pro jistotu zkontroluj a případně přidej).
