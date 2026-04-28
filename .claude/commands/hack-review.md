@@ -96,7 +96,7 @@ Seřaď podle závažnosti (🔴 blocker → 🟡 nice-to-fix → 🟢 drobnost)
 ═══════════════════════
 Závěr: [jedna věta — je to OK / pojď to opravit / je to dobré s jednou výjimkou]
 Další krok: [pokud jsou blockery] "Spusť /hack-feature a řekni: 'Oprav tohle: [seznam]'"
-           [pokud je to čisté a máš PR] "Mergni PR: gh pr merge --squash"
+           [pokud je to čisté a máš PR] "Mergni PR na GitHubu — Merge pull request"
            [pokud je to čisté bez PR]   "Můžeš deployovat přes /hack-deploy"
 ```
 

@@ -97,7 +97,7 @@ Od teď pro přidání nové feature:
 1. `/hack-feature` — vytvoří branch, implementuje, pushne, vytvoří PR
 2. Vercel automaticky vytvoří **preview deployment** na PR — otestuješ tam
 3. `/hack-review` — nechá druhou AI projít změny
-4. `gh pr merge --squash` — mergne do main → Vercel deployne do produkce
+4. Mergni PR přímo na GitHubu — otevři PR v prohlížeči → tlačítko **Merge pull request** → Confirm. Vercel pak automaticky deployne do produkce.
 
 Tenhle cyklus opakuješ pro každou feature."
 

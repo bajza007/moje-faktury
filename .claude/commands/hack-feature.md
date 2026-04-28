@@ -121,7 +121,7 @@ bez toho, abys viděl výsledek na preview URL.
 Další kroky:
 - Otevři preview URL a proklikej svou feature
 - `/hack-review` — nech druhou AI projít tvoje změny na PR
-- Až jsi spokojený: `gh pr merge --squash` a Vercel deployuje do produkce."
+- Až jsi spokojený: otevři PR na GitHubu → klikni **Merge pull request** → Confirm. Vercel pak deployne do produkce."
 
 ## Recept: AI-powered feature
 
