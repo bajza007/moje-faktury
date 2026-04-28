@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { createClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -24,6 +25,19 @@ Formát:
 
 export async function POST(request: NextRequest) {
   try {
+    // Ověření přihlášeného uživatele — middleware /api/* nehlídá,
+    // takže bez tohohle by endpoint byl veřejný a kdokoli by mohl pálit Gemini quota.
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
