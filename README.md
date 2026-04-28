@@ -1,23 +1,29 @@
-# PRD Vibe Kit
+# Moje faktury
 
-Předpřipravený kit s AI agenty pro **Product Vibe Coding** workshop.
+Interní webová appka pro evidenci nákladových faktur — nahraješ PDF, AI vyplní
+údaje (dodavatel, IČO, částky, datum), zařadíš do kategorie/projektu a appka
+si pamatuje zařazení podle dodavatele. Pro 2člennou firmu, sdílený přístup,
+export do CSV.
 
-Žádný kód, žádná appka — jen agenti a pravidla. Všechno si vygeneruješ sám z vlastního PRD.
+## Stack
 
-## Quick Start
+Next.js 15 (App Router) + TypeScript + Tailwind + Supabase (Postgres + Auth + Storage) + Gemini API + Vercel
+
+## Lokální vývoj
 
 ```bash
-# 1. Naklonuj kit
-git clone git@github.com:jirkasemmler/prd-vibe-kit.git <moje-appka>
-
-# 2. Spusť Claude Code
-cd <moje-appka>
-claude
-# nebo Claude Desktop → záložka Code → Working dir → <moje-appka>
-
-# 3. Validace — napiš /hack a mělo by to napovídat
-/hack-check
+npm install
+npm run dev
 ```
+
+Plný PRD viz [PRD.md](PRD.md), SQL schéma v [migrations/001_initial.sql](migrations/001_initial.sql).
+
+---
+
+## Workshop kit (jak appka vznikla)
+
+Tahle appka byla postavená přes **Product Vibe Coding** workshop kit — sada AI agentů
+pro Claude Code, kteří provedou flow PRD → scaffold → deploy → feature loop.
 
 ## Co je v kitu
 
