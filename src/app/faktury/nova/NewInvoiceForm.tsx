@@ -166,7 +166,9 @@ export default function NewInvoiceForm({
           if (match.default_category_id) {
             setCategoryId(String(match.default_category_id));
           }
-          if (match.default_project_id) {
+          // Auto-suggest projektu podle dodavatele NIKDY nepřepíše ruční výběr.
+          // (Uživatel projekt zvolil v kroku 1 PŘED uploadem.)
+          if (match.default_project_id && !projectId) {
             setProjectId(String(match.default_project_id));
           }
         }
@@ -181,15 +183,16 @@ export default function NewInvoiceForm({
     }
   }
 
-  // Když uživatel zvolí existujícího suppliera → předvyplň jeho default kategorii/projekt
+  // Když uživatel zvolí existujícího suppliera → předvyplň jeho default kategorii/projekt.
+  // Auto-suggest NIKDY nepřepíše ruční výběr (kategorie/projekt už je vyplněn).
   function handleSupplierSelect(id: string) {
     setSupplierId(id);
     const s = suppliers.find((x) => String(x.id) === id);
     if (s) {
-      if (s.default_category_id) {
+      if (s.default_category_id && !categoryId) {
         setCategoryId(String(s.default_category_id));
       }
-      if (s.default_project_id) {
+      if (s.default_project_id && !projectId) {
         setProjectId(String(s.default_project_id));
       }
     }
@@ -317,18 +320,60 @@ export default function NewInvoiceForm({
     (c) => String(c.id) === categoryId
   )?.name;
 
+  const fileLocked = projectId === "";
+
   return (
     <div className="space-y-6">
-      {/* Krok 1: Upload */}
+      {/* Krok 1: Vyber projekt (povinná brána před uploadem) */}
       <div className="bg-white border border-slate-200 rounded-lg p-5">
-        <h2 className="font-semibold mb-3">1. Nahrát PDF</h2>
+        <h2 className="font-semibold mb-1">1. Vyber projekt</h2>
+        <p className="text-xs text-slate-500 mb-3">
+          Projekt zvol nejdřív — odemkne se nahrání PDF. Později ho lze ve
+          formuláři ještě změnit.
+        </p>
+        {projects.length === 0 ? (
+          <div className="text-sm text-amber-700 bg-amber-50 px-3 py-2 rounded-md">
+            Žádný projekt v databázi. Založ projekt přímo v Supabase Table Editoru
+            (tabulka <code>projects</code>) a obnov stránku.
+          </div>
+        ) : (
+          <select
+            className={inputClass}
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+            disabled={phase === "processing" || phase === "saving"}
+          >
+            <option value="">— vyber projekt —</option>
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      {/* Krok 2: Upload */}
+      <div
+        className={`bg-white border border-slate-200 rounded-lg p-5 ${
+          fileLocked ? "opacity-50" : ""
+        }`}
+      >
+        <h2 className="font-semibold mb-3">2. Nahrát PDF</h2>
         <input
           type="file"
           accept="application/pdf"
-          disabled={phase === "processing" || phase === "saving"}
+          disabled={
+            fileLocked || phase === "processing" || phase === "saving"
+          }
           onChange={handleFileChange}
-          className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:cursor-not-allowed"
         />
+        {fileLocked && (
+          <p className="text-xs text-slate-500 mt-2">
+            Nejdřív vyber projekt nahoře.
+          </p>
+        )}
         {file && (
           <p className="text-xs text-slate-500 mt-2">
             {file.name} · {(file.size / 1024).toFixed(0)} KB
@@ -344,13 +389,13 @@ export default function NewInvoiceForm({
         )}
       </div>
 
-      {/* Krok 2: Formulář */}
+      {/* Krok 3: Formulář */}
       {phase === "ready" || phase === "saving" ? (
         <form
           onSubmit={handleSubmit}
           className="bg-white border border-slate-200 rounded-lg p-5 space-y-5"
         >
-          <h2 className="font-semibold">2. Zkontroluj a doplň údaje</h2>
+          <h2 className="font-semibold">3. Zkontroluj a doplň údaje</h2>
           <p className="text-xs text-slate-500 -mt-3">
             Údaje vyplnila AI z PDF — uprav, pokud něco nesedí.
           </p>
