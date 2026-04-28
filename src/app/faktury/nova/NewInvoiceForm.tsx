@@ -289,8 +289,26 @@ export default function NewInvoiceForm({
       router.refresh();
     } catch (err) {
       const m = err instanceof Error ? err.message : "Neznámá chyba";
-      setError(m);
-      setPhase("ready");
+
+      // Cleanup: PDF už je v Storage, ale insert selhal — smaž orphan soubor,
+      // aby se nehromadily a aby šel stejný PDF nahrát znovu (file_hash unique).
+      if (filePath) {
+        try {
+          await supabase.storage.from("invoices").remove([filePath]);
+          setFilePath("");
+        } catch {
+          // Pokud cleanup selže, jen to zalogujeme — uživatel už dostane error
+          // o důvodu, proč insert nevyšel.
+          console.error("Nepodařilo se smazat orphan PDF:", filePath);
+        }
+      }
+
+      setError(m + " (PDF jsme z úložiště odebrali, můžeš upload zkusit znovu.)");
+      // Vrátíme uživatele na začátek — musí nahrát PDF znovu, protože ho nemáme.
+      setFile(null);
+      setFileHash("");
+      setExtractedData(null);
+      setPhase("idle");
     }
   }
 

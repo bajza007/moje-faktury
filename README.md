@@ -9,12 +9,22 @@ export do CSV.
 
 Next.js 15 (App Router) + TypeScript + Tailwind + Supabase (Postgres + Auth + Storage) + Gemini API + Vercel
 
+## Setup nového Supabase projektu (DEV i PROD)
+
+1. Otevři projekt v Supabase dashboardu
+2. **SQL Editor** → vlož celý obsah [`migrations/001_initial.sql`](migrations/001_initial.sql) → **Run**
+3. **Storage** → **New bucket** → název `invoices` → **Public bucket: ON**
+4. **Authentication → Users → Add user** → vyplň email + heslo, **Auto Confirm User: ON**
+   (registrace v UI je vypnutá; účty zakládáš ručně)
+
 ## Lokální vývoj
 
 ```bash
 npm install
 npm run dev
 ```
+
+Klíče v `.env.local` (viz [`.env.example`](.env.example)) — Supabase URL + publishable key + Gemini API key.
 
 Plný PRD viz [PRD.md](PRD.md), SQL schéma v [migrations/001_initial.sql](migrations/001_initial.sql).
 

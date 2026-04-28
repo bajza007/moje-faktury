@@ -106,6 +106,34 @@ create policy "invoices_authenticated_all" on invoices
   with check (auth.uid() is not null);
 
 -- ============================================================
+-- STORAGE POLICIES pro bucket "invoices"
+-- Storage má vlastní RLS oddělené od tabulek — bez těchto policy
+-- nejde nahrávat/mazat soubory ani s autentizovaným userem.
+-- POZN: Bucket "invoices" musíš vytvořit ručně v Supabase dashboardu
+-- (Storage → New bucket → název "invoices" → Public bucket: ON).
+-- ============================================================
+
+create policy "invoices_storage_authenticated_upload"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'invoices');
+
+create policy "invoices_storage_authenticated_update"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'invoices')
+  with check (bucket_id = 'invoices');
+
+create policy "invoices_storage_authenticated_delete"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'invoices');
+
+create policy "invoices_storage_public_select"
+  on storage.objects for select
+  using (bucket_id = 'invoices');
+
+-- ============================================================
 -- SEED DATA — předvyplněné kategorie a projekty
 -- ============================================================
 
